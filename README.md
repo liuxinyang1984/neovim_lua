@@ -74,6 +74,7 @@ alias nvim-new='nvim -u ~/git/neovim/init.new.lua'
         ├── indent-blankline.lua
         ├── render-markdown.lua
         ├── table-mode.lua
+        ├── wildfire.lua        # Normal <Enter> 括号/引号内扩选
         └── suda.lua            # :sw 远程 sudo 保存
 ```
 
@@ -96,6 +97,7 @@ alias nvim-new='nvim -u ~/git/neovim/init.new.lua'
 | 缩进线 | indent-blankline |
 | 剪贴板历史 `<leader>cn` | dressing + cliphist |
 | 远程保存 `:sw` | suda.vim |
+| wildfire | Normal/Visual `<Enter>` 扩大选区（括号/引号内）；Visual `<BS>` 缩小 |
 | fcitx5 | `config/fcitx.lua`（InsertLeave → 英文） |
 
 ### B 类（LSP 栈，替代 coc 语言扩展）

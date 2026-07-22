@@ -13,6 +13,12 @@ end
 
 map("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "清除搜索高亮" })
 
+-- wildfire: expand/shrink text objects (<CR> in Normal + Visual, <BS> in Visual)
+-- Must map Visual <CR> too: first Enter leaves visual mode; without vmap the plugin's
+-- default `map <ENTER>` is skipped because nmap already points at the Plug mapping.
+map({ "n", "v" }, "<CR>", "<Plug>(wildfire-fuel)", { desc = "扩大选区（括号/引号内）" })
+map("v", "<BS>", "<Plug>(wildfire-water)", { desc = "缩小选区" })
+
 map("n", "ff", builtin("find_files"), { desc = "项目内找文件" })
 map("n", "fr", builtin("live_grep"), { desc = "全局 rg 搜索" })
 map("n", "fb", builtin("buffers"), { desc = "切换 buffer" })
