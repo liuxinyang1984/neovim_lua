@@ -1,43 +1,72 @@
 # Neovim Lua 配置
 
 从 Vimscript + coc.nvim 迁移到 Lua + 原生 LSP 栈的新配置仓库。  
-**当前状态：可日常测试使用**（A 类编辑体验 + B 类 LSP 栈已接入）；与旧 `~/.config/nvim/init.nvim` **并行**，正式切换前勿覆盖日常环境。
+**当前状态：可日常测试使用**（A 类编辑体验 + B 类 LSP 栈已接入）。
 
 ## 主要语言
 
 PHP · Go · Python · JavaScript / TypeScript · Vue · Lua（本仓库配置）
 
-## 使用方式
+## 安装
 
-### 测试新配置
+### 推荐：符号链接整目录
+
+仓库即配置目录，改代码立刻生效，无需 `cp` 同步。
 
 ```bash
-nvim -u ~/git/neovim/init.new.lua
+# 备份旧配置（若 ~/.config/nvim 已存在）
+mv ~/.config/nvim ~/.config/nvim.bak
+
+# 链到本仓库（路径按实际 clone 位置调整）
+ln -sf ~/git/neovim ~/.config/nvim
+```
+
+之后直接 `nvim` 即可。`init.lua` 会自动解析仓库根目录为 `root`，`require("config.*")` 与 lazy.nvim 的 `performance.rtp.paths` 均基于此路径。
+
+### 并行测试（不改动 ~/.config/nvim）
+
+与旧 `init.nvim` + coc 并存时，用 `-u` 指定入口：
+
+```bash
+nvim -u ~/git/neovim/init.lua
 ```
 
 建议别名（`~/.zshrc`）：
 
 ```bash
-alias nvim-new='nvim -u ~/git/neovim/init.new.lua'
+alias nvim-new='nvim -u ~/git/neovim/init.lua'
 ```
 
 | 命令 | 说明 |
 |------|------|
-| `nvim` | 现有配置（`~/.config/nvim/init.nvim` + coc） |
-| `nvim-new` | 本仓库测试配置 |
+| `nvim` | 当前默认配置（未 link 时为旧 `init.nvim` + coc） |
+| `nvim-new` | 本仓库配置（`-u` 方式） |
 
-### 入口与 runtimepath
+### 备选：wrapper `init.lua`
 
-- 入口文件为 **`init.new.lua`**（正式切换前**不要**改名为 `init.lua`）
-- 本仓库不在 `~/.config/nvim` 时，需 `init.new.lua` **prepend runtimepath**，`require("config.*")` 才能解析 `lua/config/`
-- lazy.nvim 通过 `performance.rtp.paths` 在 reset rtp 后仍能找到本仓库
+若需在 `~/.config/nvim` 保留本机私有文件、又不想替换整目录，可写最小入口加载仓库：
 
-### 常用维护命令
+```lua
+-- ~/.config/nvim/init.lua
+local root = vim.fn.expand("~/git/neovim")
+vim.opt.rtp:prepend(root)
+loadfile(root .. "/init.lua")()
+```
+
+注意：此方式下 `stdpath("config")` 仍是 `~/.config/nvim`，`lazy-lock.json` 默认会写在 wrapper 目录而非仓库。若希望 lock 文件进 git，需在 `lazy.setup` 中设置 `lockfile = root .. "/lazy-lock.json"`。
+
+### 首次启动
+
+```bash
+nvim          # 或 nvim-new
+:Lazy sync    # 安装插件（lazy.nvim 首次会自动 clone）
+:Mason        # 安装 LSP / formatter（如 gopls、intelephense、pyright、ruff）
+```
 
 | 命令 | 说明 |
 |------|------|
 | `:Lazy` | 插件管理 |
-| `:Mason` | 安装 LSP / formatter（如 `ruff`） |
+| `:Mason` | LSP / formatter 安装 |
 | `:LspInfo` | LSP 状态（alias → `:checkhealth vim.lsp`） |
 | `:checkhealth` | 健康检查 |
 
@@ -45,7 +74,8 @@ alias nvim-new='nvim -u ~/git/neovim/init.new.lua'
 
 ```
 .
-├── init.new.lua
+├── init.lua              # 入口
+├── lazy-lock.json        # lazy.nvim 版本锁（提交到 git）
 ├── README.md
 └── lua/
     ├── config/                 # 与 lazy 插件无关的核心配置
@@ -74,7 +104,7 @@ alias nvim-new='nvim -u ~/git/neovim/init.new.lua'
         ├── indent-blankline.lua
         ├── render-markdown.lua
         ├── table-mode.lua
-        ├── wildfire.lua        # Normal <Enter> 括号/引号内扩选
+        ├── wildfire.lua        # Normal/Visual <Enter> 括号/引号内扩选
         └── suda.lua            # :sw 远程 sudo 保存
 ```
 
@@ -157,28 +187,12 @@ Vue 需 **ts_ls + @vue/typescript-plugin**（与 vue_ls 联动，见 `lua/config
 | **CodeCompanion** | AI 助手（旧配置有） |
 | **LuaSnip / 片段** | 曾明确推迟（B-2 仅 LSP 补全） |
 | **前端 Prettier** | conform 未配 JS/TS/Vue 专用 formatter |
-| **正式切换** | 见下文 |
-
-## 正式切换（将来）
-
-测试满意后：
-
-```bash
-# 备份旧配置
-mv ~/.config/nvim/init.nvim ~/.config/nvim/init.nvim.bak
-
-# 同步并重命名入口
-cp -r ~/git/neovim/* ~/.config/nvim/
-mv ~/.config/nvim/init.new.lua ~/.config/nvim/init.lua
-```
-
-也可使用 git clone / symlink 等方式，按个人习惯选择。
 
 ## 与旧配置的关系
 
 | | 旧配置 | 本仓库 |
 |--|--------|--------|
-| 路径 | `~/.config/nvim/init.nvim` | `~/git/neovim/` |
+| 路径 | `~/.config/nvim/init.nvim` | `~/git/neovim/`（推荐 `ln -sf` 到 `~/.config/nvim`） |
 | 插件管理 | vim-plug | lazy.nvim |
 | LSP | coc.nvim + 扩展 | mason + nvim-lspconfig |
 | 补全 | coc | nvim-cmp |
@@ -187,4 +201,4 @@ mv ~/.config/nvim/init.new.lua ~/.config/nvim/init.lua
 | 搜索 | Leaderf（主）+ telescope | telescope |
 | 输入法 | fcitx5 InsertLeave | 同左（`config/fcitx.lua`） |
 
-迁移期间两套配置并行，互不影响。
+未 link 前可用 `nvim-new`（`-u`）与旧配置并行测试；link 后 `nvim` 即为本仓库配置。

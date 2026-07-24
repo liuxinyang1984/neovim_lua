@@ -1,10 +1,7 @@
--- Neovim Lua config (test entry — does NOT replace ~/.config/nvim/init.nvim)
+-- Neovim Lua config entry
 --
--- Usage:
---   nvim -u ~/git/neovim/init.new.lua
---
--- Suggested alias (~/.zshrc):
---   alias nvim-new='nvim -u ~/git/neovim/init.new.lua'
+-- Install (recommended): ln -sf ~/git/neovim ~/.config/nvim
+-- Parallel test:         nvim -u ~/git/neovim/init.lua  (alias nvim-new)
 
 -- Config root = this init file's directory (test: git/neovim; deploy: ~/.config/nvim)
 local root = vim.fn.fnamemodify(vim.fn.resolve(debug.getinfo(1, "S").source:sub(2)), ":h")
