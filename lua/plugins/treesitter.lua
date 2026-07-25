@@ -11,6 +11,7 @@ local parsers = {
   "css",
   "json",
   "lua",
+  "bash",
   "markdown",
   "markdown_inline",
 }
