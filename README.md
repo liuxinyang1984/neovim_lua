@@ -160,7 +160,7 @@ Vue 需 **ts_ls + @vue/typescript-plugin**（与 vue_ls 联动，见 `lua/config
 | `<leader>rn` | 重命名 |
 | `<leader>j` / `<leader>k` | 上 / 下一条诊断 |
 
-导航为 **Neovim 原生** `vim.lsp.buf.*`（多结果走 quickfix）。
+导航为 **Telescope** LSP picker（`gd`/`gr`/…；Enter 跳转，t 新标签）。
 
 #### 补全键位（插入模式）
 
