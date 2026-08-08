@@ -136,7 +136,7 @@ nvim          # 或 nvim-new
 |------|------|
 | LSP 安装 | mason + mason-lspconfig |
 | LSP 配置 | Neovim 0.11+ `vim.lsp.config` + `lua/config/lsp.lua` |
-| 补全 | nvim-cmp + cmp-nvim-lsp（**仅 LSP**，无 LuaSnip） |
+| 补全 | nvim-cmp + cmp-nvim-lsp + **signature help**（输入 `(` 参数提示） |
 | 格式化 `<leader>f` | conform（Go/PHP → LSP fallback；Python → ruff） |
 | 自动括号 | nvim-autopairs |
 | Emmet | emmet_language_server |

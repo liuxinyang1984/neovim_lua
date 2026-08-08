@@ -14,6 +14,12 @@ vim.api.nvim_create_autocmd("FileType", {
       return
     end
 
+    -- ThinkPHP <extend> triggers Neovim ftdetect as superhtml; treat as html
+    if ft == "superhtml" then
+      vim.bo[buf].filetype = "html"
+      ft = "html"
+    end
+
     local skip = {
       ["neo-tree"] = true,
       ["neo-tree-popup"] = true,

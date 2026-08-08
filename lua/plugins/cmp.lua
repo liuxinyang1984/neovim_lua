@@ -1,4 +1,4 @@
--- LSP completion only (no snippets); Plan B: Tab indent, C-j/k select
+-- LSP completion + signature help (parameter hints on fn()
 
 return {
   {
@@ -6,6 +6,7 @@ return {
     lazy = false,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-nvim-lsp-signature-help",
     },
     config = function()
       local cmp = require("cmp")
@@ -58,6 +59,7 @@ return {
         }),
         sources = {
           { name = "nvim_lsp" },
+          { name = "nvim_lsp_signature_help" },
         },
       })
     end,

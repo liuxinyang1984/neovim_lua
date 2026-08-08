@@ -37,6 +37,6 @@ require("lazy").setup({
       paths = { root },
     },
   },
-  checker = { enabled = true },
+  checker = { enabled = true, notify = false },
   change_detection = { enabled = false, notify = false },
 })
