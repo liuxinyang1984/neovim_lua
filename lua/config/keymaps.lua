@@ -62,9 +62,7 @@ local function comment_toggle()
 end
 
 map("n", "<C-/>", comment_toggle, { desc = "切换行注释" })
-map("v", "<C-/>", function()
-  require("nvim_comment").operator(vim.fn.visualmode())
-end, { desc = "切换选中注释" })
+map("x", "<C-/>", ":'<,'>CommentToggle<CR>", { desc = "切换选中注释" })
 map("i", "<C-/>", "<Esc><Cmd>lua require('nvim_comment').comment_toggle(vim.fn.line('.'), vim.fn.line('.'))<CR>", {
   desc = "切换行注释",
 })
