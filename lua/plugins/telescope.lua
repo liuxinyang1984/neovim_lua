@@ -14,7 +14,7 @@ return {
       telescope.setup({
         defaults = {
           prompt_prefix = "  ",
-          selection_caret = "  ",
+          selection_caret = "> ",
           path_display = { "truncate" },
           layout_strategy = "horizontal",
           layout_config = {
