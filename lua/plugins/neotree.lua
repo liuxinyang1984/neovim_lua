@@ -8,10 +8,34 @@ return {
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
       "nvim-tree/nvim-web-devicons",
+      {
+        "s1n7ax/nvim-window-picker",
+        version = "2.*",
+        config = function()
+          require("window-picker").setup({
+            filter_rules = {
+              autoselect_one = true,
+              include_current_win = false,
+              bo = {
+                filetype = { "neo-tree", "neo-tree-popup", "notify", "qf", "help" },
+                buftype = { "terminal", "nofile" },
+              },
+            },
+          })
+        end,
+      },
     },
     cmd = "Neotree",
     opts = {
       close_if_last_window = false,
+      event_handlers = {
+        {
+          event = "file_opened",
+          handler = function()
+            require("neo-tree.command").execute({ action = "close" })
+          end,
+        },
+      },
       filesystem = {
         follow_current_file = {
           enabled = true,
@@ -21,7 +45,7 @@ return {
           position = "left",
           mappings = {
             ["h"] = "close_node",
-            ["l"] = "open",
+            ["l"] = "open_with_window_picker",
           },
         },
       },
